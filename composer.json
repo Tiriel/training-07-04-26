@@ -12,5 +12,7 @@
             "email": "benjamin.zaslavsky@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "twig/twig": "^3.24"
+    }
 }
