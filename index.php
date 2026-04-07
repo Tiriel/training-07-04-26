@@ -1,5 +1,6 @@
 <?php
 
+use App\Event;
 use App\EventDispatcher;
 use App\Interface\EventListenerInterface;
 use Twig\Environment;
@@ -16,16 +17,17 @@ $listener = new class($twig) implements EventListenerInterface {
 
     public function handle(object $event): void
     {
-        echo $this->twig->render('event.html.twig', ['message' => $event->getMessage()]);
+        echo $this->twig->render('event.html.twig', ['message' => $event->getMessage()]).\PHP_EOL;
+        $event->stopPropagation();
     }
 };
 $dispatcher = new EventDispatcher();
 $dispatcher->addListener('foo', function ($event) {
     echo 'Foo event: '.$event->getMessage()."\n";
 });
-$dispatcher->addListener('foo', $listener);
+$dispatcher->addListener('foo', $listener, 200);
 
-$dispatcher->dispatch(new class {
+$dispatcher->dispatch(new class extends Event {
     public function getMessage(): string
     {
         return 'Hello World!';

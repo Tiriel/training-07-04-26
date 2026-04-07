@@ -9,9 +9,9 @@ class EventDispatcher
 {
     private array $listeners = [];
 
-    public function addListener(string $eventName, callable|EventListenerInterface $listener): void
+    public function addListener(string $eventName, callable|EventListenerInterface $listener, int $priority = 0): void
     {
-        $this->listeners[$eventName][] = $listener;
+        $this->listeners[$eventName][$priority][] = $listener;
     }
 
     public function dispatch(object $event, ?string $eventName = null): object
@@ -23,12 +23,28 @@ class EventDispatcher
             throw new NoListenerRegisteredException($eventName);
         }
 
-        foreach ($listeners as $listener) {
-            is_callable($listener)
-                ? $listener($event)
-                : $listener->handle($event);
+        krsort($listeners);
+
+        foreach ($listeners as $sortedListeners) {
+            $this->doDispatch($event, $sortedListeners);
         }
 
         return $event;
+    }
+
+    private function doDispatch(object $event, array $listeners): void
+    {
+        foreach ($listeners as $listener) {
+            if ($event instanceof Event && $event->isPropagationStopped()) {
+                return;
+            }
+
+            if ($listener instanceof EventListenerInterface) {
+                $listener->handle($event);
+                continue;
+            }
+
+            $listener($event);
+        }
     }
 }
