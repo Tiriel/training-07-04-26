@@ -12,8 +12,13 @@ class EventDispatcher
     public function dispatch(object $event, ?string $eventName = null): object
     {
         $eventName ??= $event::class;
+        $listeners = $this->listeners[$eventName] ?? [];
 
-        foreach ($this->listeners[$eventName] as $listener) {
+        if ([] === $listeners) {
+            throw new NoListenerRegisteredException($eventName);
+        }
+
+        foreach ($listeners as $listener) {
             is_callable($listener)
                 ? $listener($event)
                 : $listener->handle($event);
