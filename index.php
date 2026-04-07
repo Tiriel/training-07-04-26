@@ -1,7 +1,9 @@
 <?php
 
-require __DIR__.'/EventDispatcher.php';
-require __DIR__.'/EventListenerInterface.php';
+use App\EventDispatcher;
+use App\Interface\EventListenerInterface;
+
+require_once __DIR__.'/vendor/autoload.php';
 
 $listener = new class implements EventListenerInterface {
     public function handle(object $event): void

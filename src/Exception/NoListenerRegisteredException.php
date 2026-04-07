@@ -1,6 +1,8 @@
 <?php
 
-class NoListenerRegisteredException extends RuntimeException
+namespace App\Exception;
+
+class NoListenerRegisteredException extends \RuntimeException
 {
     public function __construct(public readonly string $eventName)
     {

@@ -1,0 +1,16 @@
+{
+    "name": "benjamin/app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Benjamin Zaslavsky",
+            "email": "benjamin.zaslavsky@gmail.com"
+        }
+    ],
+    "require": {}
+}
