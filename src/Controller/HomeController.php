@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerHelper;
 use Symfony\Component\DependencyInjection\Attribute\AutowireMethodOf;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,11 +28,9 @@ class HomeController
         ]);
     }
 
-    #[Route('/contact', name: 'app_main_contact', methods: ['GET'])]
-    public function contact(): Response
-    {
-        return $this->render('main/contact.html.twig');
-    }
+    #[Route('/contact', name: 'app_home_contact', methods: ['GET'], priority: -1)]
+    #[Template('main/contact.html.twig')]
+    public function contact(): void {}
 
     private function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
