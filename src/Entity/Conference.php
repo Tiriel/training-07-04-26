@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
@@ -20,21 +21,31 @@ class Conference
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private ?Uuid $id = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 10)]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 30)]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Assert\NotNull()]
     #[ORM\Column]
     private ?bool $accessible = null;
 
+    #[Assert\Length(min: 20)]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $prerequisites = null;
 
+    #[Assert\NotNull()]
+    #[Assert\GreaterThanOrEqual('today')]
     #[ORM\Column]
     private ?\DateTimeImmutable $startAt = null;
 
+    #[Assert\NotNull()]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'startAt')]
     #[ORM\Column]
     private ?\DateTimeImmutable $endAt = null;
 
@@ -47,6 +58,8 @@ class Conference
     /**
      * @var Collection<int, Organization>
      */
+    #[Assert\Count(min: 1)]
+    #[Assert\Valid]
     #[ORM\ManyToMany(targetEntity: Organization::class, inversedBy: 'conferences')]
     private Collection $organizations;
 
