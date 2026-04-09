@@ -20,16 +20,17 @@ class ConferenceController extends AbstractController
         $offset = ($request->query->getInt('page', 1) - 1) * $limit;
         $conferences = $repository->findBy([], null, $limit, $offset);
 
-        return $this->json(\array_map(fn(Conference $c) => [
-            'id' => $c->getId(),
-            'name' => $c->getName(),
-        ], $conferences));
+        return $this->render('conference/list.html.twig', [
+            'conferences' => $conferences,
+        ]);
     }
 
     #[Route('/conference/{id:conference}', name: 'app_conference_show', requirements: ['id' => Requirement::UUID], methods: ['GET'])]
     public function show(Conference $conference): Response
     {
-        return $this->json(['id' => $conference->getId(), 'name' => $conference->getName()]);
+        return $this->render('conference/show.html.twig', [
+            'conference' => $conference,
+        ]);
     }
 
     #[Route('/conference/{name}/{start}/{end}',
