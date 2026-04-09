@@ -9,17 +9,17 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="card-title">
-                            <h1 class="fw-bold" style="color: limegreen;">{# TODO: Insert conference name #}</h1>
+                            <h1 class="fw-bold" style="color: limegreen;">{{ volunteering.conference.name }}</h1>
                         </div>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between mt-4">
                                 <div>
-                                    <p>{# TODO: Insert volunteering user's email #} volunteered from <span
-                                            class="fw-semibold">{# TODO: Insert volunteering start date #}</span> to
-                                        <span class="fw-semibold">{# TODO: Insert volunteering end date #}</span></p>
-                                    <p class="my-0">Conference: <a href="{# TODO: Link to show Conference page #}">{# TODO: Insert conference name #}</a></p>
+                                    <p>{{ volunteering.forUser.email }} volunteered from <span
+                                            class="fw-semibold">{{ volunteering.startAt|date('d/m/y') }}</span> to
+                                        <span class="fw-semibold">{{ volunteering.endAt|date('d/m/y') }}</span></p>
+                                    <p class="my-0">Conference: <a href="{{ path('app_conference_show', {id: volunteering.conference.id}) }}">{{ volunteering.conference.name }}</a></p>
                                 </div>
                             </div>
                         </li>
@@ -28,5 +28,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}

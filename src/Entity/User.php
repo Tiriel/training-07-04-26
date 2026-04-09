@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -35,6 +37,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Organization>
+     */
+    #[ORM\ManyToMany(targetEntity: Organization::class, inversedBy: 'users')]
+    private Collection $organizations;
+
+    /**
+     * @var Collection<int, Volunteering>
+     */
+    #[ORM\OneToMany(targetEntity: Volunteering::class, mappedBy: 'forUser', orphanRemoval: true)]
+    private Collection $volunteerings;
+
+    public function __construct()
+    {
+        $this->organizations = new ArrayCollection();
+        $this->volunteerings = new ArrayCollection();
+    }
 
     public function getId(): ?Uuid
     {
@@ -115,5 +135,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, Organization>
+     */
+    public function getOrganizations(): Collection
+    {
+        return $this->organizations;
+    }
+
+    public function addOrganization(Organization $organization): static
+    {
+        if (!$this->organizations->contains($organization)) {
+            $this->organizations->add($organization);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganization(Organization $organization): static
+    {
+        $this->organizations->removeElement($organization);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Volunteering>
+     */
+    public function getVolunteerings(): Collection
+    {
+        return $this->volunteerings;
+    }
+
+    public function addVolunteering(Volunteering $volunteering): static
+    {
+        if (!$this->volunteerings->contains($volunteering)) {
+            $this->volunteerings->add($volunteering);
+            $volunteering->setForUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVolunteering(Volunteering $volunteering): static
+    {
+        if ($this->volunteerings->removeElement($volunteering)) {
+            // set the owning side to null (unless already changed)
+            if ($volunteering->getForUser() === $this) {
+                $volunteering->setForUser(null);
+            }
+        }
+
+        return $this;
     }
 }
