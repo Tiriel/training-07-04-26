@@ -3,14 +3,35 @@
 namespace App\Controller;
 
 use App\Entity\Conference;
+use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
 class ConferenceController extends AbstractController
 {
+    #[Route('/conference', name: 'app_conference_list', methods: ['GET'])]
+    public function list(Request $request, ConferenceRepository $repository): Response
+    {
+        $limit = 10;
+        $offset = ($request->query->getInt('page', 1) - 1) * $limit;
+        $conferences = $repository->findBy([], null, $limit, $offset);
+
+        return $this->json(\array_map(fn(Conference $c) => [
+            'id' => $c->getId(),
+            'name' => $c->getName(),
+        ], $conferences));
+    }
+
+    #[Route('/conference/{id:conference}', name: 'app_conference_show', requirements: ['id' => Requirement::UUID], methods: ['GET'])]
+    public function show(Conference $conference): Response
+    {
+        return $this->json(['id' => $conference->getId(), 'name' => $conference->getName()]);
+    }
+
     #[Route('/conference/{name}/{start}/{end}',
         name: 'app_conference_new',
         requirements: [
