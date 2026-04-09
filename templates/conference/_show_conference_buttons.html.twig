@@ -1,0 +1,10 @@
+{# TODO: Use this snippet to replace the "Back" button in your conference/show.html.twig #}
+
+<div class="col-md-8 m-auto justify-content-start">
+    <a href="{{ path('app_volunteering_new', {'event': event.id}) }}">
+        <button class="btn text-white" style="background-color: limegreen;">Volunteer on this event</button>
+    </a>
+    <a href="{{ path('app_conference_list') }}">
+        <button class="btn text-black bg-white" style="border-color: limegreen;">Back</button>
+    </a>
+</div>
