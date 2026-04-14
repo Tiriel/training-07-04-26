@@ -43,6 +43,14 @@ class ConferenceRepository extends ServiceEntityRepository
     /**
      * @return list<Conference>
      */
+    public function listAll(): array
+    {
+        return $this->findAll();
+    }
+
+    /**
+     * @return list<Conference>
+     */
     public function searchByName(string $name): array
     {
         $qb = $this->createQueryBuilder('conference');

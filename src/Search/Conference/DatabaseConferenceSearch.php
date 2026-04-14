@@ -16,7 +16,7 @@ final class DatabaseConferenceSearch
     public function searchByName(string|null $name = null): array
     {
         if (null === $name) {
-            return $this->conferenceRepository->findAll();
+            return $this->conferenceRepository->listAll();
         }
 
         return $this->conferenceRepository->searchByName($name);
