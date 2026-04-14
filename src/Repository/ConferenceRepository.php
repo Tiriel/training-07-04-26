@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Conference;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Conference>
@@ -37,6 +38,21 @@ class ConferenceRepository extends ServiceEntityRepository
         return $qb
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return list<Conference>
+     */
+    public function searchByName(string $name): array
+    {
+        $qb = $this->createQueryBuilder('conference');
+
+        $qb
+            ->andWhere($qb->expr()->like('conference.name', ':name'))
+            ->setParameter('name', "%{$name}%")
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     public function save(Conference $entity, bool $flush = false): void
