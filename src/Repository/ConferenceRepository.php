@@ -10,7 +10,7 @@ use function Doctrine\ORM\QueryBuilder;
 /**
  * @extends ServiceEntityRepository<Conference>
  */
-class ConferenceRepository extends ServiceEntityRepository
+class ConferenceRepository extends ServiceEntityRepository implements ConferenceRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

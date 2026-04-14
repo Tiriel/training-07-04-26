@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Search\Conference;
 
-use App\Repository\ConferenceRepository;
+use App\Repository\ConferenceRepositoryInterface;
 
 final class DatabaseConferenceSearch
 {
     public function __construct(
-        private readonly ConferenceRepository $conferenceRepository,
+        private readonly ConferenceRepositoryInterface $conferenceRepository,
     ) {
     }
 
