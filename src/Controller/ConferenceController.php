@@ -18,6 +18,11 @@ class ConferenceController extends AbstractController
     public function list(Request $request, ConferenceSearchInterface $conferenceSearch): Response
     {
         $conferences = $conferenceSearch->searchByName($request->query->getString('name'));
+        $conferences = $conferenceSearch->searchByName($request->query->getString('name'));
+        $conferences = $conferenceSearch->searchByName($request->query->getString('name'));
+        $conferences = $conferenceSearch->searchByName($request->query->getString('name'));
+        $conferences = $conferenceSearch->searchByName($request->query->getString('name'));
+        $conferences = $conferenceSearch->searchByName($request->query->getString('name'));
 
         return $this->render('conference/list.html.twig', [
             'conferences' => $conferences,
