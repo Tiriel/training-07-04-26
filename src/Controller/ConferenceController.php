@@ -6,6 +6,7 @@ use App\Entity\Conference;
 use App\Event\Conference\ConferenceSubmittedEvent;
 use App\Form\ConferenceType;
 use App\Search\Conference\ConferenceSearchInterface;
+use App\Security\ConferencePermission;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,6 +48,7 @@ class ConferenceController extends AbstractController
 //    #[IsGranted(static function (IsGrantedContext $context): bool {
 //        return $context->isGranted('ROLE_WEBSITE') || $context->isGranted('ROLE_ORGANIZER');
 //    })]
+    #[IsGranted(ConferencePermission::CREATE)]
     public function newConference(Request $request, EntityManagerInterface $manager, EventDispatcherInterface $eventDispatcher): Response
     {
         $conference = new Conference();

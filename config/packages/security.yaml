@@ -52,7 +52,6 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        - { route: 'app_conference_new', allow_if: 'is_granted("ROLE_WEBSITE") or is_granted("ROLE_ORGANIZER")' }
         - { path: '^/conference$', roles: 'IS_AUTHENTICATED' }
         - { path: '^/conference/', roles: 'IS_AUTHENTICATED' }
         # - { path: ^/admin, roles: ROLE_ADMIN }
