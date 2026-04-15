@@ -17,4 +17,6 @@ interface ConferenceRepositoryInterface
      * @return list<Conference>
      */
     public function searchByName(string $name): array;
+
+    public function total(): int;
 }

@@ -63,6 +63,11 @@ class ConferenceRepository extends ServiceEntityRepository implements Conference
         return $qb->getQuery()->getResult();
     }
 
+    public function total(): int
+    {
+        return $this->count();
+    }
+
     public function save(Conference $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
