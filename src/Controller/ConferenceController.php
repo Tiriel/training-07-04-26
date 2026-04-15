@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGrantedContext;
 
 class ConferenceController extends AbstractController
 {
@@ -41,6 +43,10 @@ class ConferenceController extends AbstractController
     }
 
     #[Route('/conference/new', name: 'app_conference_new', methods: ['GET', 'POST'])]
+    // TODO: php >= 8.5
+//    #[IsGranted(static function (IsGrantedContext $context): bool {
+//        return $context->isGranted('ROLE_WEBSITE') || $context->isGranted('ROLE_ORGANIZER');
+//    })]
     public function newConference(Request $request, EntityManagerInterface $manager, EventDispatcherInterface $eventDispatcher): Response
     {
         $conference = new Conference();
