@@ -46,6 +46,10 @@ class ConferenceController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+            // create event
+            // dispatch event
+            // If event->isRejected() return to form
+            // Else persist conference
             $manager->persist($conference);
             $manager->flush();
 
