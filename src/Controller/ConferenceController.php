@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Conference;
+use App\Event\Conference\ConferenceSubmittedEvent;
 use App\Form\ConferenceType;
 use App\Search\Conference\ConferenceSearchInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -38,7 +41,7 @@ class ConferenceController extends AbstractController
     }
 
     #[Route('/conference/new', name: 'app_conference_new', methods: ['GET', 'POST'])]
-    public function newConference(Request $request, EntityManagerInterface $manager): Response
+    public function newConference(Request $request, EntityManagerInterface $manager, EventDispatcherInterface $eventDispatcher): Response
     {
         $conference = new Conference();
         $form = $this->createForm(ConferenceType::class, $conference);
@@ -46,14 +49,19 @@ class ConferenceController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            // create event
-            // dispatch event
-            // If event->isRejected() return to form
-            // Else persist conference
-            $manager->persist($conference);
-            $manager->flush();
+            $event = new ConferenceSubmittedEvent($conference);
+            $eventDispatcher->dispatch($event);
 
-            return $this->redirectToRoute('app_conference_show', ['id' => $conference->getId()]);
+            if ($event->isRejected() === false) {
+                $manager->persist($conference);
+                $manager->flush();
+
+                return $this->redirectToRoute('app_conference_show', ['id' => $conference->getId()]);
+            }
+
+            foreach ($event->getRejectReasons() as $reason) {
+                $form->addError(new FormError($reason));
+            }
         }
 
         return $this->render('conference/new.html.twig', [
