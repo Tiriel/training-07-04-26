@@ -6,10 +6,10 @@ namespace App\Event\Conference;
 
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-final class ConferenceSubscriber
+#[AsEventListener]
+final class RejectConferenceIfTooFarInTheFutureListener
 {
-    #[AsEventListener]
-    public function rejectConferenceIfTooFarInTheFuture(ConferenceSubmittedEvent $event): void
+    public function __invoke(ConferenceSubmittedEvent $event): void
     {
         if ($event->conference->getEndAt() < new \DateTimeImmutable('+2 years')) {
             return;
