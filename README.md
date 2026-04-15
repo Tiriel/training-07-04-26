@@ -14,4 +14,12 @@ $ symfony serve
 
 ## Log in
 
-First register your own account using the dedicated link on the website.
+You can register your own account using the dedicated link on the website or use one of the existing users :
+
+| email                 | password  | roles          |
+|-----------------------|-----------|----------------|
+| nobody@example.com    | nobody    |                |
+| user@example.com      | user      | ROLE_USER      |
+| website@example.com   | website   | ROLE_WEBSITE   |
+| organizer@example.com | organizer | ROLE_ORGANIZER |
+| admin@example.com     | admin     | ROLE_ADMIN     |
